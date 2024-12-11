@@ -4,6 +4,7 @@ import cors from 'cors'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
 
+const port = process.env.PORT || 3000;
 
 const prisma = new PrismaClient()
 const app = express();
@@ -98,16 +99,6 @@ app.get('/desafios', async (req, res) => {
 app.get('/usuarios', async (req, res) => {
     let users = []
     users = await prisma.user.findMany()
-    // if(req.query) {
-    //     users = await prisma.user.findMany({
-    //         where: {
-    //            name: req.query.name
-    //         }
-    //     })
-    // } else {
-    //     users = await prisma.user.findMany()
-    // }  
-
     res.status(200).json(users);
 });
 
@@ -205,13 +196,7 @@ app.post('desafiosConcluidos', async (req, res) => {
         }
     })
 })
-const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
         console.log("Server is running on port 3000");
 })
-
-/* 2xx - sucesso
-4xx - erros do usuário (front-end)
-5xx - erros do servidor (back-end)
-*/
