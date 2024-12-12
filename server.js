@@ -2,6 +2,7 @@ import express from 'express'
 import { PrismaClient } from '@prisma/client'
 import cors from 'cors'
 import bcrypt from 'bcrypt'
+import { env } from 'dotenv'
 
 const port = process.env.PORT || 3000;
 
