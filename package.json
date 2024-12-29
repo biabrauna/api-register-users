@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "main": "server.js",
+  "proxy": "http://localhost:5000",
   "engines": {
     "node": "22.x"
   },

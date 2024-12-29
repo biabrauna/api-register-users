@@ -1,6 +1,5 @@
 import express from 'express'
 import { PrismaClient } from '@prisma/client'
-import cors from 'cors'
 import bcrypt from 'bcrypt'
 import { env } from 'dotenv'
 
@@ -9,7 +8,8 @@ const port = process.env.PORT || 3000;
 const prisma = new PrismaClient()
 const app = express();
 app.use(express.json());
-app.use(cors());
+const cors = require('cors');
+app.use(cors({ origin: 'https://econsciente-app.netlify.app' }));
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
