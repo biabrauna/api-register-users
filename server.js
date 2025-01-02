@@ -1,14 +1,12 @@
-import express from 'express'
-import { PrismaClient } from '@prisma/client'
-import bcrypt from 'bcrypt'
-import { env } from 'dotenv'
+import express from 'express';
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
+import cors from 'cors';
 
-const port = process.env.PORT || 3000;
-
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 const app = express();
+
 app.use(express.json());
-const cors = require('cors');
 app.use(cors({ origin: 'https://econsciente-app.netlify.app' }));
 
 app.get('/', (req, res) => {
@@ -192,7 +190,7 @@ app.get('/posts', async (req, res) => {
     res.status(200).json(posts);
 });
 
-app.post('desafiosConcluidos', async (req, res) => {
+app.post('/desafiosConcluidos', async (req, res) => {
     await prisma.desafiosConcluidos.create({
         data: {
             userId: req.body.userId,
@@ -200,6 +198,11 @@ app.post('desafiosConcluidos', async (req, res) => {
         }
     })
 })
+
+process.on('SIGINT', async () => {
+    await prisma.$disconnect();
+    process.exit();
+  });  
 
 app.listen(port, () => {
         console.log("Server is running on port 3000");
