@@ -1,12 +1,12 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-
+import cors from 'cors'
 
 const prisma = new PrismaClient();
 const app = express();
 const port = process.env.PORT || 3000;
-const cors = require('cors');
+
 app.use(express.json());
 const allowedOrigins = ['https://econsciente-app.netlify.app']; // Your frontend URL
 
