@@ -5,6 +5,7 @@ import cors from 'cors';
 
 const prisma = new PrismaClient();
 const app = express();
+const port = PORT.process.env
 
 app.use(express.json());
 app.use(cors({ origin: 'https://econsciente-app.netlify.app' }));
