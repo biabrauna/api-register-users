@@ -1,14 +1,24 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import cors from 'cors';
+
 
 const prisma = new PrismaClient();
 const app = express();
-const port = process.env.PORT || 3000
-
+const port = process.env.PORT || 3000;
+const cors = require('cors');
 app.use(express.json());
-app.use(cors({ origin: 'https://econsciente-app.netlify.app' }));
+const allowedOrigins = ['https://econsciente-app.netlify.app']; // Your frontend URL
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) { // Allow requests with no origin (like Postman) or from your specific origin
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}));
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
