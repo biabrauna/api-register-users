@@ -3,6 +3,7 @@ const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const corsMiddleware = require('./corsMiddleware');
 
 // Optimize Prisma for serverless environment
 const prisma = new PrismaClient({
@@ -19,7 +20,18 @@ process.on('beforeExit', closeConnection);
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+// Apply the custom CORS middleware
+app.use(corsMiddleware);
+
+// Apply standard cors middleware as backup
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
+
+// Handle preflight requests
+app.options('*', corsMiddleware);
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -300,6 +312,17 @@ app.post('/desafiosConcluidos', async (req, res) => {
   }
 });
 
+// Add a specific route to handle CORS preflight for troubleshooting
+app.get('/cors-test', (req, res) => {
+  res.json({ message: 'CORS test successful', origin: req.headers.origin });
+});
+
+// Log all requests for debugging
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.path} - Origin: ${req.headers.origin || 'unknown'}`);
+  next();
+});
+
 // Export for Vercel serverless function
 module.exports = app;
 
@@ -307,5 +330,6 @@ module.exports = app;
 if (!process.env.VERCEL && process.env.NODE_ENV !== 'production') {
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
+    console.log(`CORS is configured for: ${corsMiddleware.allowedOrigins || 'all origins'}`);
   });
 }
