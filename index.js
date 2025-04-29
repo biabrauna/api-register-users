@@ -205,6 +205,15 @@ process.on('SIGINT', async () => {
     process.exit();
   });  
 
+if (process.env.VERCEL) {
+    module.exports = app;
+  } else {
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
+    });
+  }
+  
+
 app.listen(port, () => {
         console.log("Server is running on port 3000");
 })
