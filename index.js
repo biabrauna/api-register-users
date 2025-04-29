@@ -200,11 +200,6 @@ app.post('/desafiosConcluidos', async (req, res) => {
     })
 })
 
-process.on('SIGINT', async () => {
-    await prisma.$disconnect();
-    process.exit();
-  });  
-
 if (process.env.VERCEL) {
     module.exports = app;
   } else {
